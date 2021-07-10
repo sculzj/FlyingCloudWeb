@@ -1,0 +1,16 @@
+.box {
+  position: absolute;
+  border: solid 1px gray;
+  border-radius: 5px;
+  border-left: none;
+  overflow: hidden;
+}
+.list {
+  width: 480px;
+}
+.rank {
+  float: left;
+  color: #FF4D4F;
+  width: 64px;
+}
+/*# sourceMappingURL=index.module.css.map */

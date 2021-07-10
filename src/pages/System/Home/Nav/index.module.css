@@ -1,0 +1,12 @@
+.frame {
+  width: 200px;
+  min-height: 1080px;
+  font-size: 18px;
+  font-weight: bold;
+  float: left;
+}
+.item {
+  font-size: 16px;
+  font-weight: normal;
+}
+/*# sourceMappingURL=index.module.css.map */
