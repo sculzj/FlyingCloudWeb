@@ -37,7 +37,7 @@ class Sign extends Component {
         result: '',
         map: false,
         point: '',
-        address:''
+        address: ''
     };
 
     verifyCode = () => ({
@@ -104,29 +104,28 @@ class Sign extends Component {
     })
 
     readyLicense = file => {
-        if (!this.formRef.getFieldValue('identity')||!this.formRef.getFieldValue('code')){
-            message.error({content:'上传文件之前请先填写机构代码及识别码信息！'}).then();
+        if (!this.formRef.getFieldValue('identity') || !this.formRef.getFieldValue('code')) {
+            message.error({content: '上传文件之前请先填写机构代码及识别码信息！'}).then();
             return Upload.LIST_IGNORE;
         }
         if (this.files.has('license')) {
             this.files.delete('license');
         }
         this.files.append('license', file,
-            `${this.formRef.getFieldValue('identity')}_License${file.name.slice(file.name.lastIndexOf('.'))}`);
-        console.log(`${this.formRef.getFieldValue('identity')}_License${file.name.slice(file.name.lastIndexOf('.'))}`);
+            `${this.formRef.getFieldValue('identity')}_license${file.name.slice(file.name.lastIndexOf('.'))}`);
         return false;
     }
 
     readyAuthLeter = file => {
-        if (!this.formRef.getFieldValue('identity')||!this.formRef.getFieldValue('code')){
-            message.error({content:'上传文件之前请先填写机构代码及识别码信息！'}).then();
+        if (!this.formRef.getFieldValue('identity') || !this.formRef.getFieldValue('code')) {
+            message.error({content: '上传文件之前请先填写机构代码及识别码信息！'}).then();
             return Upload.LIST_IGNORE;
         }
-        if (this.files.has('authLeter')) {
-            this.files.delete('authLeter');
+        if (this.files.has('letter')) {
+            this.files.delete('letter');
         }
-        this.files.append('authLeter', file,
-            `${this.formRef.getFieldValue('identity')}_AuthLeter${file.name.slice(file.name.lastIndexOf('.'))}`);
+        this.files.append('letter', file,
+            `${this.formRef.getFieldValue('identity')}_letter${file.name.slice(file.name.lastIndexOf('.'))}`);
         return false;
     }
 
@@ -139,7 +138,7 @@ class Sign extends Component {
             });
             return;
         }
-        if (!this.files.get('authLeter') || !this.files.get('license')) {
+        if (!this.files.get('letter') || !this.files.get('license')) {
             Modal.error({
                 title: '错误！',
                 okText: '确认！',
@@ -173,27 +172,28 @@ class Sign extends Component {
     }
 
     showMap = () => {
-        this.setState({map:true},);
+        this.setState({map: true},);
     }
 
-    hideMap=()=>{
-        this.setState({map:false});
-        this.formRef.validateFields(['address']).then().catch(e=>{});
+    hideMap = () => {
+        this.setState({map: false});
+        this.formRef.validateFields(['address']).then().catch(e => {
+        });
     }
 
-    saveAddress=(value)=>{
-        this.setState({address:value});
+    saveAddress = (value) => {
+        this.setState({address: value});
     }
 
-    onOk=()=>{
-        const {address}=this.state;
-        if (address){
-            if (!address.includes('市')&&!address.includes('省')){
-                message.warn({content:'当前地址未包含省级或市级信息，请从搜索列表中选择正确的地址信息！',duration:5}).then();
+    onOk = () => {
+        const {address} = this.state;
+        if (address) {
+            if (!address.includes('市') && !address.includes('省')) {
+                message.warn({content: '当前地址未包含省级或市级信息，请从搜索列表中选择正确的地址信息！', duration: 5}).then();
                 return;
             }
-        }else {
-            message.warn({content:'不接受自定义输入的地址信息，请从搜索列表中选择正确的地址信息！',duration:5}).then();
+        } else {
+            message.warn({content: '不接受自定义输入的地址信息，请从搜索列表中选择正确的地址信息！', duration: 5}).then();
             return;
         }
         this.formRef.setFieldsValue({address: address});
@@ -267,8 +267,10 @@ class Sign extends Component {
                                     </Form.Item>
                                     <Form.Item label='企业地址' name='address' hasFeedback
                                                rules={[{required: true, message: '企业地址不能为空！'}]}
-                                               >
-                                        <Input suffix={<EnvironmentOutlined/>}  onFocus={this.showMap} ref={element=>{this.address=element}}/>
+                                    >
+                                        <Input suffix={<EnvironmentOutlined/>} onFocus={this.showMap} ref={element => {
+                                            this.address = element
+                                        }}/>
                                     </Form.Item>
                                     <Form.Item name='orgLicense' getValueProps={() => {
                                         return 'fileList'
@@ -344,7 +346,8 @@ class Sign extends Component {
                         </div>
                 }
                 <Footer/>
-                <Modal visible={this.state.map} width={800} bodyStyle={{height: '800px'}} title='在线地图' maskClosable={false} okText='确认'
+                <Modal visible={this.state.map} width={800} bodyStyle={{height: '800px'}} title='在线地图'
+                       maskClosable={false} okText='确认'
                        cancelText='取消' onCancel={this.hideMap} onOk={this.onOk} focusTriggerAfterClose={false}>
                     <MapPanel saveAddress={this.saveAddress}/>
                 </Modal>

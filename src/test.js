@@ -1,2 +1,4 @@
-const array=[];
-console.log(array.includes(0));
+import moment from "moment";
+
+const str=new Date();
+console.log(moment(str).format('YYYY-MM-DD HH:mm:ss'))
