@@ -70,10 +70,6 @@ class Approve extends Component {
         this.setState({visible: !this.state.visible});
     }
 
-    getLicensePages=(pdf)=>{
-        console.log(pdf.numPages);
-    }
-
     render() {
 
         return (
