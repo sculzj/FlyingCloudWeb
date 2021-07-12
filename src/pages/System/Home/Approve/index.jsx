@@ -3,17 +3,13 @@ import {Button, Form, Image, Input, message, Modal, Progress, Select, Space, Tab
 import {FileSearchOutlined, SisternodeOutlined} from "@ant-design/icons";
 import axios from "axios";
 import moment from "moment";
-import {Document, Page, pdfjs} from "react-pdf";
 
 import Store from "../../../../redux/store";
 import PdfReader from "../../../../components/PdfReader";
 
-// require('../../../../resource');
-
 const {Option} = Select;
 const {Column} = Table;
 const {store} = Store;
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 class Approve extends Component {
 
