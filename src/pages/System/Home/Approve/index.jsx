@@ -13,9 +13,16 @@ const {store} = Store;
 
 class Approve extends Component {
 
-    state = {dataSource: [], visible: false, info: {}}
+    state = {dataSource: [], visible: false, info: {}, loading: false}
 
     componentDidMount() {
+        this.initDataSource();
+    }
+
+    /**
+     * 初始化未审批的全部企业数据
+     */
+    initDataSource = () => {
         axios(
             {
                 method: 'post',
@@ -39,6 +46,9 @@ class Approve extends Component {
         }).catch();
     }
 
+    /**
+     * 获取单个企业信息
+     */
     approveOrgInfo = (key) => {
         return () => {
             axios(
@@ -49,7 +59,7 @@ class Approve extends Component {
                     headers: {authorization: store.getState().token}
                 }
             ).then((response) => {
-                console.log(response.data.result);
+                // console.log(response.data.result);
                 const {code, name, site, address, identity} = response.data.result;
                 this.setState({visible: true, info: response.data.result}, () => {
                     this.form.setFieldsValue({
@@ -68,6 +78,42 @@ class Approve extends Component {
 
     toggleModal = () => {
         this.setState({visible: !this.state.visible});
+    }
+
+    /**
+     * 执行审批操作
+     */
+    byApprove = () => {
+
+        if (!this.form.getFieldValue('result')) {
+            message.error('必须选择审批结果后方可提交！').then();
+            return;
+        }
+        if (this.form.getFieldValue('result') === 'refused' && !this.form.getFieldValue('opinion')) {
+            message.error('审核不通过必须填写审批意见！').then();
+            return;
+        }
+        this.setState({loading: true});
+        axios(
+            {
+                method: 'post',
+                url: 'http://localhost:3000/api/approve',
+                data: {
+                    identity: this.state.info.identity,
+                    opinion: this.form.getFieldValue('opinion'),
+                    result: this.form.getFieldValue('result')
+                },
+                headers: {authorization: store.getState().token}
+            }
+        ).then(() => {
+            message.success('操作成功！正在重新获取待审批的企业数据......').then();
+            this.setState({visible: false, loading: false}, () => {
+                this.initDataSource();
+            })
+        }).catch(() => {
+            message.success('操作失败！请联系后台人员处理。').then();
+            this.setState({visible: false, loading: false});
+        });
     }
 
     render() {
@@ -144,10 +190,10 @@ class Approve extends Component {
                                            style={{border: 'solid 1px #D9D9D9'}}/> : <Image src='error' width={200} height={200}/>
                             }
                         </Form.Item>
-                        <Form.Item label='审批意见' name='letter'>
+                        <Form.Item label='审批意见' name='opinion'>
                             <Input placeholder='请输入审批意见'/>
                         </Form.Item>
-                        <Form.Item label='审批结果'>
+                        <Form.Item label='审批结果' name='result'>
                             <Select placeholder='请选择审批结果'>
                                 <Option value='approve'>通过</Option>
                                 <Option value='refused'>拒绝</Option>
@@ -155,10 +201,11 @@ class Approve extends Component {
                         </Form.Item>
                         <Form.Item wrapperCol={{offset: 5, span: 15}}>
                             <Form.Item style={{display: 'inline-block', width: '270px', float: 'left'}}>
-                                <Button block type='primary'>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</Button>
+                                <Button block type='primary' onClick={this.byApprove}
+                                        loading={this.state.loading}>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</Button>
                             </Form.Item>
                             <Form.Item style={{display: 'inline-block', width: '270px', float: 'right'}}>
-                                <Button block>取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</Button>
+                                <Button block onClick={this.toggleModal}>取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</Button>
                             </Form.Item>
                         </Form.Item>
                     </Form>

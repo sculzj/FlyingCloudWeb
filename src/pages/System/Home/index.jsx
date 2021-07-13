@@ -4,6 +4,7 @@ import {Route, Switch} from "react-router";
 import Header from "./Header";
 import Nav from "./Nav";
 import Approve from "./Approve";
+import AddUser from "./AddUser";
 
 class Home extends Component {
 
@@ -34,6 +35,7 @@ class Home extends Component {
                 }}>
                     <Switch>
                         <Route path='/system/home/approve' component={Approve}/>
+                        <Route path='/system/home/addUser' component={AddUser}/>
                     </Switch>
                 </div>
             </div>

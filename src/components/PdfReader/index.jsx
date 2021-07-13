@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Document, Page} from "react-pdf";
-
+import {Document, Page,pdfjs} from "react-pdf";
+import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import pdfStyle from './index.module.css';
 import {Button} from "antd";
-import {LeftOutlined, RightOutlined} from "@ant-design/icons";
-// require('../../resource/userResource/Tencent_license.pdf');
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 class PdfReader extends Component {
 
