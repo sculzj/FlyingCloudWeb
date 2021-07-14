@@ -1,0 +1,21 @@
+.box {
+  width: 1000px;
+  margin: 0 auto;
+}
+.title {
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  margin-bottom: 50px;
+  border-bottom: solid 1px #C2C2C2;
+}
+.topItem {
+  margin-bottom: 0;
+}
+.item {
+  display: inline-block;
+}
+.date {
+  width: 100%;
+}
+/*# sourceMappingURL=index.module.css.map */
