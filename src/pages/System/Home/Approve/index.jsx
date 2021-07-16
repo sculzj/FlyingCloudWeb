@@ -6,6 +6,7 @@ import moment from "moment";
 
 import Store from "../../../../redux/store";
 import PdfReader from "../../../../components/PdfReader";
+import UnAuth from "../../../../components/UnAuth";
 
 const {Option} = Select;
 const {Column} = Table;
@@ -119,98 +120,99 @@ class Approve extends Component {
     render() {
 
         return (
-            <>
-                <Table dataSource={this.state.dataSource} locale={{emptyText: '暂无需要审批的企业'}}
-                       pagination={{hideOnSinglePage: true}}>
-                    <Column title='企业名称' dataIndex='name' key='name' align='center' width='20%'/>
-                    <Column title='申请时间' dataIndex='time' key='time' align='center' width='20%'/>
-                    <Column title='当前状态' dataIndex='state' key='state' align='center' width='20%'/>
-                    <Column title='任务耗时' dataIndex='consum' key='consum' align='center' width='20%' render={(text) => {
-                        let percent = Number.parseFloat(text) / 48;
-                        let strokeColor = {
-                            from: '#108ee9',
-                            to: '#87d068'
-                        };
-                        if (percent > 1) {
-                            percent = 100;
-                        } else {
-                            percent = Math.floor(percent * 100);
-                        }
-                        if (percent > 50) {
-                            strokeColor = {
-                                from: '#FFB6C1',
-                                to: '#CD2626'
+            !store.getState().userinfo.approve?<UnAuth/>:
+                <>
+                    <Table dataSource={this.state.dataSource} locale={{emptyText: '暂无需要审批的企业'}}
+                           pagination={{hideOnSinglePage: true}}>
+                        <Column title='企业名称' dataIndex='name' key='name' align='center' width='20%'/>
+                        <Column title='申请时间' dataIndex='time' key='time' align='center' width='20%'/>
+                        <Column title='当前状态' dataIndex='state' key='state' align='center' width='20%'/>
+                        <Column title='任务耗时' dataIndex='consum' key='consum' align='center' width='20%' render={(text) => {
+                            let percent = Number.parseFloat(text) / 48;
+                            let strokeColor = {
+                                from: '#108ee9',
+                                to: '#87d068'
                             };
-                        }
-                        // console.log(percent);
-                        return (<Progress status='active' showInfo={false} strokeColor={strokeColor} percent={percent}
-                                          title={`当前耗时：${text}小时`}/>);
-                    }}/>
-                    <Column title='操作' dataIndex='option' key='option' align='center' width='20%' render={(text) => (
-                        <Space size={20}>
-                            <Button icon={<FileSearchOutlined style={{fontSize: '20px'}}/>} type='link' title='查看详情'
-                                    onClick={this.approveOrgInfo(text)}/>
-                            <Button icon={<SisternodeOutlined style={{fontSize: '20PX'}}/>} type='link' title='任务指派'/>
-                        </Space>
-                    )}/>
-                </Table>
-                <Modal visible={this.state.visible} title='注册信息审核' footer={null} width={1050}
-                       bodyStyle={{height: '1020px'}} onCancel={this.toggleModal}>
-                    <Form labelCol={{span: 5}} wrapperCol={{span: 15}} ref={(form) => {
-                        this.form = form
-                    }}>
-                        <Form.Item label='企业代码' name='code'>
-                            <Input readOnly/>
-                        </Form.Item>
-                        <Form.Item label='企业名称' name='name'>
-                            <Input readOnly/>
-                        </Form.Item>
-                        <Form.Item label='企业官网' name='site'>
-                            <Input readOnly/>
-                        </Form.Item>
-                        <Form.Item label='企业地址' name='address'>
-                            <Input readOnly/>
-                        </Form.Item>
-                        <Form.Item label='企业标识' name='identity'>
-                            <Input readOnly/>
-                        </Form.Item>
-                        <Form.Item label='营业执照' name='license'>
-                            {
-                                this.state.info.license ? this.state.info.license.endsWith('.pdf') ?
-                                    <PdfReader height='240px' file={require(`../../../../${this.state.info.license}`).default}/> :
-                                    <Image src={require(`../../../../${this.state.info.license}`).default} height={240}
-                                           style={{border: 'solid 1px #D9D9D9'}}/> : <Image src='error' width={200} height={200}/>
+                            if (percent > 1) {
+                                percent = 100;
+                            } else {
+                                percent = Math.floor(percent * 100);
                             }
-                        </Form.Item>
-                        <Form.Item label='授权书' name='letter'>
-                            {
-                                this.state.info.letter ? this.state.info.letter.endsWith('.pdf') ?
-                                    <PdfReader height='240px' file={require(`../../../../${this.state.info.letter}`).default}/>  :
-                                    <Image src={require(`../../../../${this.state.info.letter}`).default } height={240}
-                                           style={{border: 'solid 1px #D9D9D9'}}/> : <Image src='error' width={200} height={200}/>
+                            if (percent > 50) {
+                                strokeColor = {
+                                    from: '#FFB6C1',
+                                    to: '#CD2626'
+                                };
                             }
-                        </Form.Item>
-                        <Form.Item label='审批意见' name='opinion'>
-                            <Input placeholder='请输入审批意见'/>
-                        </Form.Item>
-                        <Form.Item label='审批结果' name='result'>
-                            <Select placeholder='请选择审批结果'>
-                                <Option value='approve'>通过</Option>
-                                <Option value='refused'>拒绝</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item wrapperCol={{offset: 5, span: 15}}>
-                            <Form.Item style={{display: 'inline-block', width: '270px', float: 'left'}}>
-                                <Button block type='primary' onClick={this.byApprove}
-                                        loading={this.state.loading}>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</Button>
+                            // console.log(percent);
+                            return (<Progress status='active' showInfo={false} strokeColor={strokeColor} percent={percent}
+                                              title={`当前耗时：${text}小时`}/>);
+                        }}/>
+                        <Column title='操作' dataIndex='option' key='option' align='center' width='20%' render={(text) => (
+                            <Space size={20}>
+                                <Button icon={<FileSearchOutlined style={{fontSize: '20px'}}/>} type='link' title='查看详情'
+                                        onClick={this.approveOrgInfo(text)}/>
+                                <Button icon={<SisternodeOutlined style={{fontSize: '20PX'}}/>} type='link' title='任务指派'/>
+                            </Space>
+                        )}/>
+                    </Table>
+                    <Modal visible={this.state.visible} title='注册信息审核' footer={null} width={1050}
+                           bodyStyle={{height: '1020px'}} onCancel={this.toggleModal}>
+                        <Form labelCol={{span: 5}} wrapperCol={{span: 15}} ref={(form) => {
+                            this.form = form
+                        }}>
+                            <Form.Item label='企业代码' name='code'>
+                                <Input readOnly/>
                             </Form.Item>
-                            <Form.Item style={{display: 'inline-block', width: '270px', float: 'right'}}>
-                                <Button block onClick={this.toggleModal}>取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</Button>
+                            <Form.Item label='企业名称' name='name'>
+                                <Input readOnly/>
                             </Form.Item>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            </>
+                            <Form.Item label='企业官网' name='site'>
+                                <Input readOnly/>
+                            </Form.Item>
+                            <Form.Item label='企业地址' name='address'>
+                                <Input readOnly/>
+                            </Form.Item>
+                            <Form.Item label='企业标识' name='identity'>
+                                <Input readOnly/>
+                            </Form.Item>
+                            <Form.Item label='营业执照' name='license'>
+                                {
+                                    this.state.info.license ? this.state.info.license.endsWith('.pdf') ?
+                                        <PdfReader height='240px' file={require(`../../../../${this.state.info.license}`).default}/> :
+                                        <Image src={require(`../../../../${this.state.info.license}`).default} height={240}
+                                               style={{border: 'solid 1px #D9D9D9'}}/> : <Image src='error' width={200} height={200}/>
+                                }
+                            </Form.Item>
+                            <Form.Item label='授权书' name='letter'>
+                                {
+                                    this.state.info.letter ? this.state.info.letter.endsWith('.pdf') ?
+                                        <PdfReader height='240px' file={require(`../../../../${this.state.info.letter}`).default}/>  :
+                                        <Image src={require(`../../../../${this.state.info.letter}`).default } height={240}
+                                               style={{border: 'solid 1px #D9D9D9'}}/> : <Image src='error' width={200} height={200}/>
+                                }
+                            </Form.Item>
+                            <Form.Item label='审批意见' name='opinion'>
+                                <Input placeholder='请输入审批意见'/>
+                            </Form.Item>
+                            <Form.Item label='审批结果' name='result'>
+                                <Select placeholder='请选择审批结果'>
+                                    <Option value='approve'>通过</Option>
+                                    <Option value='refused'>拒绝</Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item wrapperCol={{offset: 5, span: 15}}>
+                                <Form.Item style={{display: 'inline-block', width: '270px', float: 'left'}}>
+                                    <Button block type='primary' onClick={this.byApprove}
+                                            loading={this.state.loading}>提&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;交</Button>
+                                </Form.Item>
+                                <Form.Item style={{display: 'inline-block', width: '270px', float: 'right'}}>
+                                    <Button block onClick={this.toggleModal}>取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</Button>
+                                </Form.Item>
+                            </Form.Item>
+                        </Form>
+                    </Modal>
+                </>
         );
     }
 }

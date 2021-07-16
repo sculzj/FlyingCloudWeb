@@ -6,6 +6,7 @@ import axios from "axios";
 
 import navStyle from './index.module.css';
 import Store from '../../../../redux/store';
+import {withRouter} from "react-router";
 
 const {Option} = Select;
 const {store} = Store;
@@ -60,7 +61,9 @@ class Header extends Component {
             }).then(response=>{
                 clearTimeout(timer);
                 this.setState({visible:false,loading:false},()=>{
-                    message.success('密码已修改成功！').then();
+                    message.success('账号初始化成功，即将跳转到登录界面，请重新登录！').then(()=>{
+                        this.props.history.replace('/system');
+                    });
                 })
             }).catch(()=>{
 
@@ -84,7 +87,7 @@ class Header extends Component {
                         <DesktopOutlined title='返回主页' className={navStyle.set}/>
                     </div>
                 </div>
-                <Modal visible={this.state.visible} title='修改密码' footer={null} closable={false}>
+                <Modal visible={this.state.visible} title='账号初始化' footer={null} closable={false}>
                     <Form labelCol={{span: 5}} wrapperCol={{span: 17}} validateTrigger='onBlur' ref={element => {
                         this.form = element
                     }} onFinish={this.toModifyPwd}>
@@ -204,4 +207,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default withRouter(Header);

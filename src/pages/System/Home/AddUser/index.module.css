@@ -1,5 +1,5 @@
 .box {
-  width: 1000px;
+  width: 700px;
   margin: 0 auto;
 }
 .title {
@@ -10,12 +10,15 @@
   border-bottom: solid 1px #C2C2C2;
 }
 .topItem {
-  margin-bottom: 0;
+  margin-bottom: 20px;
 }
 .item {
   display: inline-block;
 }
 .date {
   width: 100%;
+}
+.check {
+  line-height: 32px;
 }
 /*# sourceMappingURL=index.module.css.map */

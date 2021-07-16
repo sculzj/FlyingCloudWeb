@@ -42,7 +42,7 @@ class Login extends Component {
             }).then(response => {
                 //清除定时器
                 clearTimeout(timer);
-                console.log(response.data);
+                // console.log(response.data);
                 switch (response.data.code) {
                     case Code.error:
                         Modal.error({title: '错误', content: '登录失败，该账号不存在，请检查登录账号及密码是否正确！'});
