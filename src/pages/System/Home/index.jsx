@@ -5,6 +5,7 @@ import Header from "./Header";
 import Nav from "./Nav";
 import Approve from "./Approve";
 import AddUser from "./AddUser";
+import Auth from "./Auth";
 
 class Home extends Component {
 
@@ -36,6 +37,7 @@ class Home extends Component {
                     <Switch>
                         <Route path='/system/home/approve' component={Approve}/>
                         <Route path='/system/home/addUser' component={AddUser}/>
+                        <Route path='/system/home/auth' component={Auth}/>
                     </Switch>
                 </div>
             </div>

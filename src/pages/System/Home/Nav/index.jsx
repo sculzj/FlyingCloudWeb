@@ -38,7 +38,7 @@ class Nav extends Component {
                     </SubMenu>
                     <SubMenu key='role' title='用户管理' icon={<UserSwitchOutlined style={{fontSize: '16px'}}/>}>
                         <Menu.Item key='addUser' className={navStyle.item}>创建用户</Menu.Item>
-                        <Menu.Item key='accredit' className={navStyle.item}>权限管理</Menu.Item>
+                        <Menu.Item key='auth' className={navStyle.item}>权限管理</Menu.Item>
                     </SubMenu>
                     <SubMenu key='broadcast' title='消息推送' icon={<MailOutlined style={{fontSize: '16px'}}/>}>
                         <Menu.Item key='post' className={navStyle.item}>新建推送</Menu.Item>
