@@ -67,16 +67,6 @@ class Auth extends Component {
 
     render() {
 
-        // const dataSource = [{
-        //     key: '1',
-        //     uid: 'system',
-        //     state: 0,
-        //     start: '2021-07-01 01:01:01',
-        //     end: '2021-12-31 23:59:59',
-        //     permission: '数据看板/用户管理',
-        //     option: '123'
-        // }];
-
         return (
             <>
                 {
