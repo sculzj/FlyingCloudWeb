@@ -7,6 +7,8 @@ import moment from "moment";
 import Store from "../../../../redux/store";
 import PdfReader from "../../../../components/PdfReader";
 import UnAuth from "../../../../components/UnAuth";
+import Guidepost from "../Guidepost";
+import {serverIP} from "../../../../resource/constant";
 
 const {Option} = Select;
 const {Column} = Table;
@@ -27,7 +29,7 @@ class Approve extends Component {
         axios(
             {
                 method: 'post',
-                url: 'http://localhost:3000/api/applyOrgs',
+                url: `${serverIP}/api/applyOrgs`,
                 headers: {authorization: store.getState().token}
             }
         ).then(response => {
@@ -55,7 +57,7 @@ class Approve extends Component {
             axios(
                 {
                     method: 'post',
-                    url: 'http://localhost:3000/api/approveInfo',
+                    url: `${serverIP}/api/approveInfo`,
                     data: {key: key},
                     headers: {authorization: store.getState().token}
                 }
@@ -112,7 +114,7 @@ class Approve extends Component {
                 this.initDataSource();
             })
         }).catch(() => {
-            message.success('操作失败！请联系后台人员处理。').then();
+            message.error('操作失败！请联系后台人员处理。').then();
             this.setState({visible: false, loading: false});
         });
     }
@@ -122,6 +124,7 @@ class Approve extends Component {
         return (
             !store.getState().userinfo.approve?<UnAuth/>:
                 <>
+                    <Guidepost guides={['系统管理','企业管理','注册申请']}/>
                     <Table dataSource={this.state.dataSource} locale={{emptyText: '暂无需要审批的企业'}}
                            pagination={{hideOnSinglePage: true}}>
                         <Column title='企业名称' dataIndex='name' key='name' align='center' width='20%'/>

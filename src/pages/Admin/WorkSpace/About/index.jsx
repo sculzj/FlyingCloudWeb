@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Form, Image, Input, Tabs} from "antd";
+import {Form, Image, Input, Tabs} from "antd";
 import orgInfoStyle from './index.module.css';
 import Store from '../../../../redux/store';
 const {store}=Store;

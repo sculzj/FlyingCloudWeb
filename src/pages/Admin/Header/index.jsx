@@ -10,6 +10,7 @@ const {store}=Store;
 class Header extends React.Component {
 
     render() {
+
         return (
             <>
                 <div className={navMemberStyle.header}>

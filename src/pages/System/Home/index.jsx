@@ -5,7 +5,9 @@ import Header from "./Header";
 import Nav from "./Nav";
 import Approve from "./Approve";
 import AddUser from "./AddUser";
+import Manage from "./Manage";
 import Auth from "./Auth";
+import MsgModle from "./MsgModel";
 
 class Home extends Component {
 
@@ -24,20 +26,24 @@ class Home extends Component {
                 <Header/>
                 <Nav/>
                 <div style={{
-                    minWidth: '1650px',
-                    minHeight: '1000px',
+                    minWidth: '1710px',
+                    minHeight: '990px',
                     height: this.state.height,
                     width: this.state.width,
                     borderLeft: 'solid 1px #C2C2C2',
                     float: 'left',
                     marginLeft: '10px',
                     marginTop: '10px',
-                    padding:'0 20px'
+                    padding:'0 10px',
+                    overflow:'hidden',
+                    boxSizing:'border-box'
                 }}>
                     <Switch>
                         <Route path='/system/home/approve' component={Approve}/>
+                        <Route path='/system/home/infoList' component={Manage}/>
                         <Route path='/system/home/addUser' component={AddUser}/>
                         <Route path='/system/home/auth' component={Auth}/>
+                        <Route path='/system/home/template' component={MsgModle}/>
                     </Switch>
                 </div>
             </div>
