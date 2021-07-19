@@ -146,7 +146,7 @@ class Sign extends Component {
             });
             return;
         }
-        const {code, name, email, site, address, mobile, telephone, identity, pwd} = values;
+        const {code, name, email, site, address, mobile, telephone, identity} = values;
         this.setState({loading: true});
         setTimeout(() => {
             this.setState({loading: false});
@@ -154,7 +154,7 @@ class Sign extends Component {
         axios({
             method: 'post',
             url: '/api/register',
-            data: {code, name, email, site, address, mobile, telephone, identity, pwd}
+            data: {code, name, email, site, address, mobile, telephone, identity}
         }).then(response => {
             if (response.data.state === Status.success) {
                 axios({
@@ -298,44 +298,18 @@ class Sign extends Component {
                                     </Form.Item>
                                     <Form.Item label='固定电话' name='telephone' hasFeedback rules={[{
                                         required: true,
-                                        message: '固定电话为“区号-座机号码”格式的11位或12为数字组合',
+                                        message: '固定电话为“区号-座机号码”格式的12位数字组合',
                                         type: "string",
-                                        pattern: /\d{3}-\d{8}|\d{4}-\d{7}/
+                                        pattern: /^(\d{3}-\d{8}|\d{4}-\d{7})$/
                                     }]}>
                                         <Input placeholder='格式为：区号-座机号码，例：010-12345678'/>
-                                    </Form.Item>
-                                    <Form.Item name='pwd' label='登录密码' rules={[{
-                                        required: true,
-                                        message: '密码必须包含大小写字母和数字的组合，长度在8-16位之间',
-                                        type: 'string',
-                                        pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/
-                                    }]} hasFeedback>
-                                        <Input.Password placeholder='请输入登录密码' allowClear autoComplete='off'/>
-                                    </Form.Item>
-                                    <Form.Item name='configPwd' label='确认密码' dependencies={['pwd']} hasFeedback
-                                               rules={[
-                                                   {
-                                                       required: true,
-                                                       message: '请再次输入密码并确保两次密码输入一致！',
-                                                   },
-                                                   ({getFieldValue}) => ({
-                                                           validator(_, value) {
-                                                               if (!value || getFieldValue('pwd') === value) {
-                                                                   return Promise.resolve();
-                                                               }
-                                                               return Promise.reject('两次输入密码不一致！');
-                                                           }
-                                                       }
-                                                   )
-                                               ]}>
-                                        <Input.Password placeholder='请再次输入登录密码' allowClear autoComplete='off'/>
                                     </Form.Item>
                                     <Form.Item wrapperCol={{offset: 5}} name='clause' getValueProps={() => {
                                         return 'checked';
                                     }}>
                                         <Checkbox ref={elment => {
                                             this.clause = elment
-                                        }}>同意<a>飞云互联服务协议</a></Checkbox>
+                                        }}>同意<a href='http://www.baidu.com'>飞云互联服务协议</a></Checkbox>
                                     </Form.Item>
                                     <Form.Item {...tailLayout}>
                                         <Button type='primary' htmlType='submit' style={{width: '100%'}}

@@ -28,3 +28,9 @@ export const KEYS={PERSONAL_ZONE:'personalZone'};
 
 export const Status={waiting:"waiting",ready:"ready",success:"success",failed:"failed",refused:"refused",error: "error",overtime:"overtime",verifying:'validating'};
 export const Code={success:200,error:500,refused: 401,overtime:408};
+
+export const serverIP='http://127.0.0.1:3000';
+
+export const ROLE={GENERAL_MANAGER:1};
+
+export const SEX={MAN:1,WOMAN:2};

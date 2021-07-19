@@ -14,7 +14,7 @@ moment.locale('zh-cn');
 const {RangePicker} = DatePicker;
 const {store} = Store;
 
-class AddUser extends Component {
+class Index extends Component {
 
     state = {validity: {start: '', end: '', loading: false}}
 
@@ -88,7 +88,7 @@ class AddUser extends Component {
                 message.success('系统管理员账户已成功添加！').then();
                 clearTimeout(timer);
             });
-        }).catch(()=>{
+        }).catch(() => {
             this.setState({loading: false}, () => {
                 message.error('系统管理员账户添加失败！').then();
                 clearTimeout(timer);
@@ -152,7 +152,7 @@ class AddUser extends Component {
                                     {
                                         required: true,
                                         type: 'string',
-                                        pattern: /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+                                        pattern: /^1\d{10}$/,
                                         message: '电话号码格式有误！'
                                     }
                                 ]}>
@@ -198,8 +198,10 @@ class AddUser extends Component {
     }
 }
 
-export default () => (
+const AddUser = () => (
     <ConfigProvider locale={zhCN}>
-        <AddUser/>
+        <Index/>
     </ConfigProvider>
 );
+
+export default AddUser;

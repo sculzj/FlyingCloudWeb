@@ -1,6 +1,7 @@
 .frame {
   width: 200px;
-  min-height: 1080px;
+  min-height: 1000px;
+  height: calc(100% - 64px);
   font-size: 18px;
   font-weight: bold;
   float: left;

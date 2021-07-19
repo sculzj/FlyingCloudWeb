@@ -1,0 +1,109 @@
+.frame{
+  width: 100%;
+  height: calc(~"100% - 10px");
+  box-sizing: border-box;
+}
+
+.tree{
+  margin-top: 10px;
+  border-top: solid 1px #CCCCCC;
+  padding-top: 5px;
+  height: calc(~"100% - 80px");
+}
+
+.link{
+  margin-top: 10px;
+}
+
+.frame .nav{
+  width: 320px;
+  border: solid 1px #CCCCCC;
+  float: left;
+  margin-right: 10px;
+  padding: 10px;
+  height: calc(~"100% - 30px");
+  box-sizing: border-box;
+}
+
+.frame .right{
+  width: calc(~"100% - 330px");
+  height: calc(~"100%");
+  padding: 10px;
+  border: solid 1px #CCCCCC;
+  float: left;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.right .content{
+  width: 100%;
+  height: calc(~"100% - 100px");
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.content .editor{
+  height: calc(~"100% - 112px");
+  overflow: auto;
+}
+
+.toolBar{
+  width: 100%;
+  margin-top: 20px;
+  text-align: right;
+}
+
+.formItem {
+  display: inline-block;
+  width: 18%;
+  margin-right: 2.5%
+}
+
+.formItem:last-child {
+  margin-right: 0;
+}
+
+.label {
+  display: inline-block;
+  width: 96px;
+  height: 32px;
+  line-height: 30px;
+  background: #FAFAFA;
+  border: solid 1px #CCCCCC;
+  border-right: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.field{
+  border-radius: 0;
+}
+
+.formItem .field {
+  //display: inline-block;
+  width: calc(~"100% - 96px");
+  vertical-align: middle;
+}
+
+.formItem1 .field {
+  width: calc(~"100% - 96px");
+  vertical-align: middle;
+}
+
+.rate{
+  position:absolute;
+  top:-3px;
+  left: 5px;
+}
+
+.rate svg{
+  width: 15px;
+}
+
+.item {
+  border-bottom: solid 1px #CCCCCC;
+}
+
+.item:last-child {
+  border: none;
+}

@@ -24,7 +24,7 @@ class Rank extends Component {
                       dataSource={this.props.rank}
                       renderItem={item => (
                           <List.Item>
-                              <a href=''>
+                              <a href='http://www.baidu.com'>
                                   <span className={rankStyle.rank}><FireFilled/> {item.discuss}</span>
                                   <span className={rankStyle.title}>{item.title}</span>
                               </a>

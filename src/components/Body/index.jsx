@@ -7,6 +7,7 @@ import Wiki from "../../pages/Wiki";
 import Register from "../../pages/Register";
 import Admin from '../../pages/Admin';
 import System from "../../pages/System";
+import Home from "../../pages/Home";
 
 class Body extends Component {
 
@@ -21,6 +22,7 @@ class Body extends Component {
                 <Route path='/register' component={Register}/>
                 <Route path='/admin' component={Admin}/>
                 <Route path='/system' component={System}/>
+                <Route path='/home' component={Home}/>
                 <Redirect to='/index'/>
             </Switch>
         );

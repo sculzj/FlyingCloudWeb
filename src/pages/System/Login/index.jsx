@@ -18,7 +18,7 @@ class Login extends Component {
     state = {loading: false};
 
     toLogin = () => {
-        if (this.form.getFieldValue('code').toLocaleLowerCase() !== store.getState().code.toLocaleLowerCase()) {
+        if (!this.form.getFieldValue('code')||this.form.getFieldValue('code').toLocaleLowerCase() !== store.getState().code.toLocaleLowerCase()) {
             Modal.error({
                 title: '错误',
                 content: '验证码有误，请重新输入！'
@@ -36,7 +36,7 @@ class Login extends Component {
                 })
             }, 15000);
             axios({
-                url: 'http://localhost:3000/api/system',
+                url: 'http://192.168.101.4:3000/api/system',
                 method: 'post',
                 data: {uid, pwd}
             }).then(response => {
@@ -44,8 +44,14 @@ class Login extends Component {
                 clearTimeout(timer);
                 // console.log(response.data);
                 switch (response.data.code) {
-                    case Code.error:
-                        Modal.error({title: '错误', content: '登录失败，该账号不存在，请检查登录账号及密码是否正确！'});
+                    case Code.refused:
+                        Modal.error({
+                            title: '错误',
+                            content: response.data.msg,
+                            afterClose: () => {
+                                this.setState({loading: false});
+                            }
+                        });
                         break;
                     case Code.success:
                         store.dispatch(saveUserInfo(response.data.userObj));
