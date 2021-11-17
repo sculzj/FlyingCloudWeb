@@ -46,7 +46,7 @@ class EditOrg extends Component {
     updateOrgInfo = () => {
         axios({
             url: `${serverIP}/api/orgsInfo`,
-            method: 'post',
+            method: 'get',
             headers: {authorization: store.getState().token}
         }).then(response => {
             const {orgsInfo} = response.data;

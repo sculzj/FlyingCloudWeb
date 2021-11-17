@@ -3,6 +3,7 @@ import {Badge, Button, Card, Checkbox, Form, Input, InputNumber, Modal, Radio, S
 import Icon, {ShoppingCartOutlined} from "@ant-design/icons";
 import axios from "axios";
 import QRcode from 'qrcode.react';
+import moment from "moment";
 
 import style from './index.module.css';
 import {ReactComponent as SubscribeOutLined} from '../../../../images/svgs/subscribe.svg';
@@ -12,7 +13,6 @@ import Store from "../../../../redux/store";
 import {ReactComponent as UnionPayIcon} from '../../../../images/svgs/unionpay.svg';
 import {ReactComponent as AliPayIcon} from '../../../../images/svgs/alipay.svg';
 import {ReactComponent as WechatPayIcon} from '../../../../images/svgs/wechat.svg';
-import moment from "moment";
 
 const {Meta} = Card;
 const {store} = Store;
@@ -21,10 +21,13 @@ class ServiceMarket extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {product: [], shopping: [],paying:'',visible:false};
+        this.state = {product: [], shopping: [], paying: '', visible: false};
         this.getProductinfo();
     }
 
+    /**
+     * 获取产品信息
+     */
     getProductinfo = () => {
         axios(
             {
@@ -38,14 +41,63 @@ class ServiceMarket extends Component {
         }).catch();
     }
 
-    payForService=(item)=> {
-        const self=this;
+    /**
+     *根据选择的产品，动态渲染产品支付对话框
+     * @param item
+     * @returns {(function(): void)|*}
+     */
+    payForService = (item) => {
+        const self = this;
         return function () {
-            self.setState({paying:item},()=>{
-                console.log(item);
-                self.setState({visible:true});
+            self.setState({paying: item}, () => {
+                // console.log(item);
+                self.setState({visible: true});
             });
         }
+    }
+
+    /**
+     * 动态更新表单值
+     * @param changedValues 变更的值
+     * @param allValues 变更前所有的值
+     */
+    updateFormValue = (changedValues, allValues) => {
+        const {price, number,total} = allValues;
+        const rate = parseFloat(allValues.rate);
+        if (changedValues.payType && changedValues.payType === 'year') {
+            this.form.setFieldsValue({
+                    price: this.state.paying.price_year,
+                    unit_price: this.state.paying.unit_year,
+                    total: `${this.state.paying.price_year * number * rate}元`
+                }
+            );
+        }
+        if (changedValues.payType && changedValues.payType === 'forever') {
+            this.form.setFieldsValue({
+                price: this.state.paying.price_forever,
+                unit_price: this.state.paying.unit_forever,
+                total: `${this.state.paying.price_forever * number * rate}元`
+            });
+        }
+        if (changedValues.number) {
+            this.form.setFieldsValue({total: `${price * number * rate}元`});
+        }
+        if (changedValues.payway && changedValues.payway === 'unionpay') {
+            this.form.setFieldsValue({qrCode:`unionpay|url|${total}`});
+        }
+        if (changedValues.payway && changedValues.payway === 'alipay') {
+            this.form.setFieldsValue({qrCode:`alipay|url|${total}`});
+        }
+        if (changedValues.payway && changedValues.payway === 'wechat') {
+            this.form.setFieldsValue({qrCode:`wechat|url|${total}`});
+        }
+    }
+
+    /**
+     * 隐藏支付对话框
+     */
+    hiddenPayForService=()=>{
+        this.setState({paying:'',visible:false});
     }
 
     render() {
@@ -77,7 +129,8 @@ class ServiceMarket extends Component {
                                       cover={<img alt='' src={require(`../../../../images/${item.cover}`).default}/>}
                                       bodyStyle={{padding: '16px', paddingBottom: '8px'}} actions={[
                                     <ShoppingCartOutlined key='shop' title='加入购物车' style={{fontSize: '24px'}}/>,
-                                    <Icon component={PayOutLined} key='pay' title='购买支付' style={{fontSize: '24px'}} onClick={this.payForService(item)}/>,
+                                    <Icon component={PayOutLined} key='pay' title='购买支付' style={{fontSize: '24px'}}
+                                          onClick={this.payForService(item)}/>,
                                     <Icon component={SubscribeOutLined} key='subscribe' title='订阅促销信息'
                                           style={{fontSize: '24px'}}/>,
                                 ]}>
@@ -92,16 +145,20 @@ class ServiceMarket extends Component {
                         ))
                     }
                 </div>
-                <Modal title='订单支付' visible={this.state.visible} footer={<Button>取消</Button>}
-                       bodyStyle={{padding: '20px 10px 0'}} destroyOnClose>
-                    <Form labelCol={{span:6}} wrapperCol={{span:16}} preserve={false}>
-                        <Form.Item label='订单编号' name='orderCode' initialValue={moment(Date.now()).format('YYYYMMDDHHmmss')}>
+                <Modal title='订单支付' visible={this.state.visible} footer={<Button onClick={this.hiddenPayForService}>取消</Button>}
+                       bodyStyle={{padding: '20px 10px 0'}} destroyOnClose onCancel={this.hiddenPayForService}>
+                    <Form labelCol={{span: 6}} wrapperCol={{span: 16}} preserve={false}
+                          onValuesChange={this.updateFormValue} ref={(element) => {
+                        this.form = element;
+                    }}>
+                        <Form.Item label='订单编号' name='orderCode'
+                                   initialValue={moment(Date.now()).format('YYYYMMDDHHmmss')}>
                             <Input disabled bordered={false}/>
                         </Form.Item>
                         <Form.Item label='服务名称' name='product' initialValue={this.state.paying.name}>
                             <Input disabled bordered={false}/>
                         </Form.Item>
-                        <Form.Item label='订购方式' name='buyway' initialValue='year'>
+                        <Form.Item label='订购方式' name='payType' initialValue='year'>
                             <Radio.Group>
                                 <Space size={20}>
                                     <Radio value='year'>按年付费</Radio>
@@ -109,16 +166,33 @@ class ServiceMarket extends Component {
                                 </Space>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.Item label='服务单价' name='price' initialValue={`${this.state.paying.price_year}${this.state.paying.unit_year}`}>
+                        <Form.Item label='服务单价' style={{marginBottom: '0'}}>
+                            <Form.Item name='price' initialValue={this.state.paying.price_year}
+                                       style={{display: 'inline-block', width: '48px'}}>
+                                <Input disabled bordered={false}/>
+                            </Form.Item>
+                            <Form.Item name='unit_price' initialValue={this.state.paying.unit_year}
+                                       style={{display: 'inline-block'}}>
+                                <Input disabled bordered={false}/>
+                            </Form.Item>
+                        </Form.Item>
+                        <Form.Item label='订购数量' style={{marginBottom: '0'}}>
+                            <Form.Item name='number' initialValue={1} style={{display: 'inline-block'}}>
+                                <InputNumber min={1} max={999}/>
+                            </Form.Item>
+                            <Form.Item style={{display: 'inline-block'}}>
+                                <span>&nbsp;*</span>
+                            </Form.Item>
+                            <Form.Item name='unit_pay' initialValue={this.state.paying.unit_pay}
+                                       style={{display: 'inline-block'}}>
+                                <Input disabled bordered={false}/>
+                            </Form.Item>
+                        </Form.Item>
+                        <Form.Item label='限时折扣' name='rate' initialValue={`${this.state.paying.price_rate * 100}%`}>
                             <Input disabled bordered={false}/>
                         </Form.Item>
-                        <Form.Item label='订购数量' name='buyNum' initialValue={1}>
-                            <InputNumber min={1} max={999}/>
-                        </Form.Item>
-                        <Form.Item label='限时折扣' name='rate' initialValue={1}>
-                            <Input disabled bordered={false}/>
-                        </Form.Item>
-                        <Form.Item label='应付金额' name='total' initialValue={`${this.state.paying.price_year}元`}>
+                        <Form.Item label='应付金额' name='total'
+                                   initialValue={`${this.state.paying.price_year * this.state.paying.unit_pay * this.state.paying.price_rate}元`}>
                             <Input disabled bordered={false}/>
                         </Form.Item>
                         <Form.Item label='支付方式' name='payway' initialValue='unionpay'>
@@ -137,8 +211,9 @@ class ServiceMarket extends Component {
                                 </Space>
                             </Radio.Group>
                         </Form.Item>
-                        <Form.Item wrapperCol={{offset:6}}>
-                            <QRcode value='1234' size={150}/>
+                        <Form.Item wrapperCol={{offset: 6}} name='qrCode'
+                                   initialValue={`unionpay|url|${this.state.paying.price_year * this.state.paying.unit_pay * this.state.paying.price_rate}`}>
+                            <QRcode size={150} level='H'/>
                         </Form.Item>
                     </Form>
                 </Modal>

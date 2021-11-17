@@ -9,6 +9,7 @@ import OrgsList from "./OrgsList"
 import OrgInfo from "./About";
 import MyService from "./MyService";
 import ServiceMarket from "./ServiceMarket";
+import Roles from './Roles';
 
 class WorkSpace extends Component {
 
@@ -29,6 +30,7 @@ class WorkSpace extends Component {
                 <div className={adminStyle.content} style={{width:this.state.width,height:this.state.height}}>
                     <Switch>
                         <Route path='/admin/workspace/addmembers' component={AddMembers}/>
+                        <Route path='/admin/workspace/roles' component={Roles}/>
                         <Route path='/admin/workspace/orgsList' component={OrgsList}/>
                         <Route path='/admin/workspace/editOrg' component={EditOrg}/>
                         <Route path='/admin/workspace/basicinfo' component={OrgInfo}/>

@@ -23,7 +23,7 @@ class MyService extends Component {
                 <div className={style.box}>
                     <Card hoverable cover={<img alt='' src={require('../../../../images/cover_deskOA.jpg').default}/>}
                           bodyStyle={{padding: '16px', paddingBottom: '8px'}}>
-                        <Meta title='桌面OA系统【基础服务】' description='飞云桌面端基础办公系统，永久免费授权，包括事件流转、流程审批、备忘录等基础功能，支持Web浏览器以及客户端。'/>
+                        <Meta title='桌面OA系统【基础服务】' description='飞云桌面端基础办公系统，永久免费授权，包括事件流转、流程审批等基础功能，支持Web浏览器以及客户端。'/>
                         <div className={style.option}>
                             <span className={style.tag}>永久授权</span>
                             {/*<span className={style.tag}/>*/}

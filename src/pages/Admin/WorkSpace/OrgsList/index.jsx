@@ -19,7 +19,7 @@ class OrgsList extends Component {
         axios(
             {
                 url: `${serverIP}/api/orgsInfo`,
-                method: 'post',
+                method: 'get',
                 headers: {authorization: store.getState().token}
             }
         ).then(response => {

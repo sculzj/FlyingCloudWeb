@@ -20,7 +20,7 @@ class Login extends Component {
 
     /**
      * 初始化填充规则与激活选项卡
-     * @type {{autoComplete: string, random: string, QRSatus: string, loading: boolean, actived: string}}
+     * @type {{autoComplete: string, random: string, dataLoading: boolean, QRSatus: string, actived: string}}
      * actived--激活的Tab类型，loading--按钮加载状态，random--二维码字符串，QRCode--二维码状态
      */
     state = {autoComplete: 'off', actived: 'id', dataLoading: false, random: '', QRSatus: ''}
